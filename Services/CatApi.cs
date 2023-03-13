@@ -91,13 +91,13 @@ namespace CatsService.Services
             {
                 response.EnsureSuccessStatusCode();
                 var body = await response.Content.ReadAsStringAsync();
-                MessageBox.Show("Item adicionado ao Favoritos. "+ body, "Favoritos", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("Item adicionado ao Favoritos. " + body, "Favoritos", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
         }
 
         public async Task<List<CatFavorites>> GetListFavoritos()
         {
-            
+
             var client = new HttpClient();
             var request = new HttpRequestMessage
             {
@@ -106,7 +106,7 @@ namespace CatsService.Services
                 Headers =    {
                  { "x-api-key", "live_GqgbEkgSvEhAJnQVFnwUT1uI9EV39U2MBOaMy7qI9GBjyvE2XXjzOubBis7QdXzq" },
                 }
-                
+
             };
             using (var response = await client.SendAsync(request))
             {
@@ -120,6 +120,33 @@ namespace CatsService.Services
                 else
                     return null;
 
+            }
+        }
+
+        public async void DeleteCatFavoritoById(string idCat)
+        {
+            var client = new HttpClient();
+            var request = new HttpRequestMessage
+            {
+                Method = HttpMethod.Delete,
+                RequestUri = new Uri($"https://api.thecatapi.com/v1/favourites/{idCat}"),
+                Headers =
+            {
+                { "x-api-key", "live_GqgbEkgSvEhAJnQVFnwUT1uI9EV39U2MBOaMy7qI9GBjyvE2XXjzOubBis7QdXzq" },
+            },
+            };
+            using (var response = await client.SendAsync(request))
+            {
+                response.EnsureSuccessStatusCode();
+
+                if (response.StatusCode == HttpStatusCode.OK)
+                {
+                    var body = await response.Content.ReadAsStringAsync();
+                }
+                else
+                {
+                    throw new Exception("Ocorreu erro na deleção. Status de retorno:" + response.StatusCode);
+                }
             }
         }
     }

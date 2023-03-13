@@ -74,7 +74,6 @@
             this.listBox1.Name = "listBox1";
             this.listBox1.Size = new System.Drawing.Size(349, 147);
             this.listBox1.TabIndex = 3;
-            this.listBox1.SelectedIndexChanged += new System.EventHandler(this.listBox1_SelectedIndexChanged);
             // 
             // BtnExluirFavorito
             // 
@@ -85,6 +84,7 @@
             this.BtnExluirFavorito.TabIndex = 4;
             this.BtnExluirFavorito.Text = "Excluir Favorito";
             this.BtnExluirFavorito.UseVisualStyleBackColor = false;
+            this.BtnExluirFavorito.Click += new System.EventHandler(this.BtnExluirFavorito_Click);
             // 
             // FrmMeusFavoritos
             // 
