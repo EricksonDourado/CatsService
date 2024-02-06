@@ -43,7 +43,7 @@ namespace CatsService.Controllers
 
             foreach (var item in listCats)
             {
-                this.comboBox1.Items.AddRange(new object[] { item.name });
+                this.comboBox1.Items.AddRange(new object[] { item.Name });
             }
         }
 
@@ -51,14 +51,14 @@ namespace CatsService.Controllers
         {
             var index = comboBox1.SelectedIndex;
 
-            this.LblOrigem.Text = listCats[index].origin;
-            this.LblDescricao.Text = listCats[index].description;
-            this.LblTemperamento.Text = listCats[index].temperament;
-            _catImages.image_id = listCats[index].reference_image_id.ToString();
+            this.LblOrigem.Text = listCats[index].Origin;
+            this.LblDescricao.Text = listCats[index].Description;
+            this.LblTemperamento.Text = listCats[index].Temperament;
+            _catImages.Image_Id = listCats[index].Reference_Image_Id.ToString();
 
-            var imageCat = await _catApi.GetImagemCatById(_catImages.image_id);
+            var imageCat = await _catApi.GetImagemCatById(_catImages.Image_Id);
 
-            this.PicImagem.ImageLocation = imageCat.url.ToString();
+            this.PicImagem.ImageLocation = imageCat.Url.ToString();
         }
 
         private void btnIncluirFavoritos_Click(object sender, EventArgs e)
@@ -66,7 +66,7 @@ namespace CatsService.Controllers
             var user = "your-user-1234";
 
             CatApi catFavorite = new CatApi();
-            catFavorite.IncludesFavoriteCat(this._catImages.image_id, user);
+            catFavorite.IncludesFavoriteCat(this._catImages.Image_Id, user);
         }
     }
 }

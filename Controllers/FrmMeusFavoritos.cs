@@ -17,6 +17,8 @@ namespace CatsService.Controllers
         CatApi catApi = new CatApi();
         List<CatModel> catModels = new List<CatModel>();
         List<CatFavorites> listCatsFavoritos = new List<CatFavorites>();
+        private CatApi _catApi = new CatApi();
+
         public FrmMeusFavoritos()
         {
             InitializeComponent();
@@ -29,34 +31,45 @@ namespace CatsService.Controllers
 
         private async void PopularListBox()
         {
-            listBox1.Items.Clear();
+            lbFavoritos.Items.Clear();
 
             listCatsFavoritos = await catApi.GetListFavoritos();
             catModels = await catApi.GetCaracteristicasAsync();
 
             foreach (var item in listCatsFavoritos)
             {
-                var catFavorite = catModels.Where(m => m.reference_image_id.ToString() == item.image_id).Select(m => m.name).FirstOrDefault();
-                listBox1.Items.AddRange(new object[] { catFavorite });
+                var catFavorite = catModels.Where(m => m.Reference_Image_Id.ToString() == item.Image_Id).Select(m => m.Name).FirstOrDefault();
+                lbFavoritos.Items.AddRange(new object[] { catFavorite });
             }
         }
 
         private void BtnExluirFavorito_Click(object sender, EventArgs e)
         {
-            if (listBox1.SelectedItem != null)
+            if (lbFavoritos.SelectedItem != null)
             {
                 var catExcluir = (from cat in catModels
-                                 join l in listCatsFavoritos on cat.reference_image_id equals l.image_id
-                                 where cat.name == listBox1.SelectedItem as string
-                                 select l.id ).FirstOrDefault() ;
+                                 join l in listCatsFavoritos on cat.Reference_Image_Id equals l.Image_Id
+                                 where cat.Name == lbFavoritos.SelectedItem as string
+                                 select l.Id ).FirstOrDefault() ;
                 string idCat = catExcluir;
 
                 catApi.DeleteCatFavoritoById(catExcluir.ToString());
 
-                MessageBox.Show("Excluído do Favorito o Cat: " + listBox1.SelectedItem, "Mensagem", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                MessageBox.Show("Excluído do Favorito o Cat: " + lbFavoritos.SelectedItem, "Mensagem", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
 
                 PopularListBox();
             }
+        }
+
+
+        private async void lbFavoritos_SelectedIndexChanged(object sender, EventArgs e)
+        {
+                String name = lbFavoritos.SelectedItem.ToString();
+                String idCatSelec = catModels.Where(c => c.Name == name).Select(c => c.Reference_Image_Id).FirstOrDefault();
+
+                var imageCat = await _catApi.GetImagemCatById(idCatSelec);
+
+                this.pictImagem.ImageLocation = imageCat.Url.ToString();
         }
     }
 }
